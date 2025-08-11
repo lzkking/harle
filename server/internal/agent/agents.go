@@ -11,7 +11,7 @@ var (
 
 // Agents - 所有的被控者的信息
 type Agents struct {
-	agents map[string]*Agent
+	Agents map[string]*Agent
 	m      sync.Mutex
 }
 
@@ -19,7 +19,7 @@ type Agents struct {
 func (a *Agents) GetAgentById(id string) *Agent {
 	a.m.Lock()
 	defer a.m.Unlock()
-	if agent, ok := a.agents[id]; ok {
+	if agent, ok := a.Agents[id]; ok {
 		return agent
 	} else {
 		return nil
@@ -31,11 +31,11 @@ func (a *Agents) Add(id string, agent *Agent) (err error) {
 	a.m.Lock()
 	defer a.m.Unlock()
 
-	if _, ok := a.agents[id]; ok {
+	if _, ok := a.Agents[id]; ok {
 		return IDDuplication
 	}
 
-	a.agents[id] = agent
+	a.Agents[id] = agent
 
 	return
 }
@@ -45,7 +45,7 @@ func (a *Agents) Delete(id string) {
 	a.m.Lock()
 	defer a.m.Unlock()
 
-	delete(a.agents, id)
+	delete(a.Agents, id)
 
 	return
 }

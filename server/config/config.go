@@ -8,8 +8,10 @@ import (
 )
 
 const (
-	ServerConfigPath = "server.json"
-	LogFile          = "harle.log"
+	ServerConfigPath  = "server.json"
+	LogFile           = "harle.log"
+	RsaPrivateKeyFile = "rsa_private.pem"
+	RsaPublicKeyFile  = "rsa_public.pem"
 )
 
 func GetServerConfigPath() string {
@@ -21,8 +23,10 @@ func GetServerConfigPath() string {
 }
 
 type ServerConfig struct {
-	LogFile string `json:"log_file"`
-	RunMode string `json:"run_mode"`
+	LogFile           string `json:"log_file"`
+	RunMode           string `json:"run_mode"`
+	RsaPublicKeyFile  string `json:"rsa_public_key_file"`
+	RsaPrivateKeyFile string `json:"rsa_private_key_file"`
 }
 
 func (c *ServerConfig) Save() error {
@@ -70,7 +74,9 @@ func GetServerConfig() *ServerConfig {
 
 func getDefaultServerConfig() *ServerConfig {
 	return &ServerConfig{
-		LogFile: filepath.Join(assets.GetRootAppDir(), "log", LogFile),
-		RunMode: "DEBUG",
+		LogFile:           filepath.Join(assets.GetRootAppDir(), "log", LogFile),
+		RunMode:           "DEBUG",
+		RsaPrivateKeyFile: filepath.Join(assets.GetRootAppDir(), "keys", RsaPrivateKeyFile),
+		RsaPublicKeyFile:  filepath.Join(assets.GetRootAppDir(), "keys", RsaPublicKeyFile),
 	}
 }

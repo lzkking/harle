@@ -1,6 +1,8 @@
 package agent
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
 	"crypto/ecdh"
 	"crypto/rand"
 	"crypto/sha256"
@@ -11,14 +13,14 @@ import (
 )
 
 type Agent struct {
-	agentId          string    // 被控端的唯一标识符号
+	AgentId          string    // 被控端的唯一标识符号
 	sessionKey       []byte    // 会话密钥 AES
 	sessionKeyRecv   []byte    // 接收数据后的解密密钥
 	sessionKeySend   []byte    // 发送数据的加密密钥
 	sessionKeyExpire time.Time // 会话密钥过期时间
 	serverPublicKey  []byte    // 服务端的临时公钥,针对单个agent的,不同agent不同
 	serverPrivateKey []byte    // 服务端的临时私钥,针对单个agent的,是agent临时公钥的密钥对
-	agentPublicKey   []byte    //agent传递来的临时公钥
+	AgentPublicKey   []byte    //agent传递来的临时公钥
 }
 
 // GetSessionKey - 获取会话密钥
@@ -30,7 +32,7 @@ func (a *Agent) GetSessionKey() []byte {
 func (a *Agent) CalcSessionKey() (err error) {
 	if len(a.serverPrivateKey) == 0 ||
 		len(a.serverPublicKey) == 0 ||
-		len(a.agentPublicKey) == 0 {
+		len(a.AgentPublicKey) == 0 {
 		return fmt.Errorf("公私钥目前并未正确传递")
 	}
 
@@ -40,7 +42,7 @@ func (a *Agent) CalcSessionKey() (err error) {
 		return
 	}
 
-	public, err := curve.NewPublicKey(a.agentPublicKey)
+	public, err := curve.NewPublicKey(a.AgentPublicKey)
 	if err != nil {
 		return
 	}
@@ -53,7 +55,7 @@ func (a *Agent) CalcSessionKey() (err error) {
 	a.sessionKey = shared
 
 	//	生成会话密钥
-	salt := sha256.Sum256(append(a.serverPublicKey, a.agentPublicKey...))
+	salt := sha256.Sum256(append(a.serverPublicKey, a.AgentPublicKey...))
 	keySend := hkdfBytes(shared, salt[:], []byte("A->B key v1"), 32)
 	KeyRecv := hkdfBytes(shared, salt[:], []byte("B->A key v1"), 32)
 
@@ -109,6 +111,41 @@ func (a *Agent) GetServerTempKey() (serverPublicKey []byte, serverPrivateKey []b
 	serverPublicKey = a.serverPublicKey
 	serverPrivateKey = a.serverPrivateKey
 	return
+}
+
+func (a *Agent) EncryptData(data []byte) ([]byte, error) {
+	if len(data) == 0 {
+		return nil, fmt.Errorf("data长度为0")
+	}
+
+	if len(a.sessionKeySend) == 0 {
+		err := a.CalcSessionKey()
+		if err != nil {
+			return nil, fmt.Errorf("获取加密密钥失败")
+		}
+	}
+
+	sessionKey := a.sessionKeySend
+	block, err := aes.NewCipher(sessionKey)
+	if err != nil {
+		return nil, err
+	}
+
+	aead, err := cipher.NewGCM(block)
+	if err != nil {
+		return nil, err
+	}
+
+	nonce := make([]byte, aead.NonceSize())
+	if _, err = io.ReadFull(rand.Reader, nonce); err != nil {
+		return nil, err
+	}
+
+	ciphertext := aead.Seal(nil, nonce, data, nil)
+
+	out := append(nonce, ciphertext...)
+
+	return out, nil
 }
 
 func hkdfBytes(secret, salt, info []byte, n int) []byte {
