@@ -1,0 +1,15 @@
+syntax = "proto3";
+package  implant;
+
+message CommandData {
+  uint64 DataType = 1;
+  string TimeStamp = 2;
+  bytes Data = 3;
+}
+
+message FirstConnection {
+  bytes PublicKey = 1;
+  string SessionId = 2;
+  bytes Verify = 3;
+  bytes PublicKeyVerify = 4;
+}
