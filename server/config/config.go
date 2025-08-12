@@ -23,10 +23,11 @@ func GetServerConfigPath() string {
 }
 
 type ServerConfig struct {
-	LogFile           string `json:"log_file"`
-	RunMode           string `json:"run_mode"`
-	RsaPublicKeyFile  string `json:"rsa_public_key_file"`
-	RsaPrivateKeyFile string `json:"rsa_private_key_file"`
+	LogFile           string          `json:"log_file"`
+	RunMode           string          `json:"run_mode"`
+	RsaPublicKeyFile  string          `json:"rsa_public_key_file"`
+	RsaPrivateKeyFile string          `json:"rsa_private_key_file"`
+	DbConfig          *DatabaseConfig `json:"db_config"`
 }
 
 func (c *ServerConfig) Save() error {
@@ -78,5 +79,21 @@ func getDefaultServerConfig() *ServerConfig {
 		RunMode:           "DEBUG",
 		RsaPrivateKeyFile: filepath.Join(assets.GetRootAppDir(), "keys", RsaPrivateKeyFile),
 		RsaPublicKeyFile:  filepath.Join(assets.GetRootAppDir(), "keys", RsaPublicKeyFile),
+		DbConfig: &DatabaseConfig{
+			Dialect:      MYSQL,
+			Database:     "marketing",
+			Username:     "root",
+			Password:     "3Dp96rj4KN1",
+			Host:         "10.229.28.54",
+			Port:         3306,
+			MaxIdleConns: 10,
+			MaxOpenConns: 100,
+			LogLevel:     "warn",
+			Params: map[string]string{
+				"charset":   "utf8",
+				"parseTime": "True",
+				"loc":       "Local",
+			},
+		},
 	}
 }

@@ -13,3 +13,37 @@ message FirstConnection {
   bytes Verify = 3;
   bytes PublicKeyVerify = 4;
 }
+
+enum OSType {
+  OS_UNKNOWN = 0;
+  OS_WINDOWS = 1;
+  OS_LINUX = 2;
+  OS_MACOS = 3;
+  OS_BSD = 4;
+  OS_ANDROID = 5;
+}
+
+message SystemInfo {
+  OSType OS = 1;
+  string OSVersion = 2;
+  string KernelVersion = 3;
+  string Arch = 4;
+  string HostName = 5;
+  string UserName = 6;
+  uint32 Pid = 7;
+  uint64 UptimeSec = 8;
+}
+
+message NetworkInfo {
+  string WanIP = 1;
+  repeated string LanIPs = 2;
+  string Mac = 3;
+  string PrimaryIface = 4;
+}
+
+message Heartbeat {
+  string AgentID = 1;
+  uint64 Timestamp = 2;
+  SystemInfo Sys = 3;
+  NetworkInfo Net = 4;
+}

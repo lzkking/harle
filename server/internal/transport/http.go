@@ -39,6 +39,7 @@ func (s *ListenerHttpC2) mainHandler(resp http.ResponseWriter, req *http.Request
 	a := s.getSession(req)
 	if a == nil {
 		// 处理匿名agent，只做获取其中的公钥的操作，没有的话返回错误码
+		zap.S().Infof("从%v传递来的匿名连接", req.RemoteAddr)
 		s.dealAnonymousData(resp, req)
 	} else {
 		// 处理被控端传递来的数据

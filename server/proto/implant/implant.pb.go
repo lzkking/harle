@@ -22,6 +22,43 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+type OSType int32
+
+const (
+	OSType_OS_UNKNOWN OSType = 0
+	OSType_OS_WINDOWS OSType = 1
+	OSType_OS_LINUX   OSType = 2
+	OSType_OS_MACOS   OSType = 3
+	OSType_OS_BSD     OSType = 4
+	OSType_OS_ANDROID OSType = 5
+)
+
+var OSType_name = map[int32]string{
+	0: "OS_UNKNOWN",
+	1: "OS_WINDOWS",
+	2: "OS_LINUX",
+	3: "OS_MACOS",
+	4: "OS_BSD",
+	5: "OS_ANDROID",
+}
+
+var OSType_value = map[string]int32{
+	"OS_UNKNOWN": 0,
+	"OS_WINDOWS": 1,
+	"OS_LINUX":   2,
+	"OS_MACOS":   3,
+	"OS_BSD":     4,
+	"OS_ANDROID": 5,
+}
+
+func (x OSType) String() string {
+	return proto.EnumName(OSType_name, int32(x))
+}
+
+func (OSType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_a9a24761cea32b5c, []int{0}
+}
+
 type CommandData struct {
 	DataType  uint64 `protobuf:"varint,1,opt,name=DataType,proto3" json:"DataType,omitempty"`
 	TimeStamp string `protobuf:"bytes,2,opt,name=TimeStamp,proto3" json:"TimeStamp,omitempty"`
@@ -150,29 +187,289 @@ func (m *FirstConnection) GetPublicKeyVerify() []byte {
 	return nil
 }
 
+type SystemInfo struct {
+	OS            OSType `protobuf:"varint,1,opt,name=OS,proto3,enum=implant.OSType" json:"OS,omitempty"`
+	OSVersion     string `protobuf:"bytes,2,opt,name=OSVersion,proto3" json:"OSVersion,omitempty"`
+	KernelVersion string `protobuf:"bytes,3,opt,name=KernelVersion,proto3" json:"KernelVersion,omitempty"`
+	Arch          string `protobuf:"bytes,4,opt,name=Arch,proto3" json:"Arch,omitempty"`
+	HostName      string `protobuf:"bytes,5,opt,name=HostName,proto3" json:"HostName,omitempty"`
+	UserName      string `protobuf:"bytes,6,opt,name=UserName,proto3" json:"UserName,omitempty"`
+	Pid           uint32 `protobuf:"varint,7,opt,name=Pid,proto3" json:"Pid,omitempty"`
+	UptimeSec     uint64 `protobuf:"varint,8,opt,name=UptimeSec,proto3" json:"UptimeSec,omitempty"`
+}
+
+func (m *SystemInfo) Reset()         { *m = SystemInfo{} }
+func (m *SystemInfo) String() string { return proto.CompactTextString(m) }
+func (*SystemInfo) ProtoMessage()    {}
+func (*SystemInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a9a24761cea32b5c, []int{2}
+}
+func (m *SystemInfo) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SystemInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SystemInfo.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SystemInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SystemInfo.Merge(m, src)
+}
+func (m *SystemInfo) XXX_Size() int {
+	return m.Size()
+}
+func (m *SystemInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_SystemInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SystemInfo proto.InternalMessageInfo
+
+func (m *SystemInfo) GetOS() OSType {
+	if m != nil {
+		return m.OS
+	}
+	return OSType_OS_UNKNOWN
+}
+
+func (m *SystemInfo) GetOSVersion() string {
+	if m != nil {
+		return m.OSVersion
+	}
+	return ""
+}
+
+func (m *SystemInfo) GetKernelVersion() string {
+	if m != nil {
+		return m.KernelVersion
+	}
+	return ""
+}
+
+func (m *SystemInfo) GetArch() string {
+	if m != nil {
+		return m.Arch
+	}
+	return ""
+}
+
+func (m *SystemInfo) GetHostName() string {
+	if m != nil {
+		return m.HostName
+	}
+	return ""
+}
+
+func (m *SystemInfo) GetUserName() string {
+	if m != nil {
+		return m.UserName
+	}
+	return ""
+}
+
+func (m *SystemInfo) GetPid() uint32 {
+	if m != nil {
+		return m.Pid
+	}
+	return 0
+}
+
+func (m *SystemInfo) GetUptimeSec() uint64 {
+	if m != nil {
+		return m.UptimeSec
+	}
+	return 0
+}
+
+type NetworkInfo struct {
+	WanIP        string   `protobuf:"bytes,1,opt,name=WanIP,proto3" json:"WanIP,omitempty"`
+	LanIPs       []string `protobuf:"bytes,2,rep,name=LanIPs,proto3" json:"LanIPs,omitempty"`
+	Mac          string   `protobuf:"bytes,3,opt,name=Mac,proto3" json:"Mac,omitempty"`
+	PrimaryIface string   `protobuf:"bytes,4,opt,name=PrimaryIface,proto3" json:"PrimaryIface,omitempty"`
+}
+
+func (m *NetworkInfo) Reset()         { *m = NetworkInfo{} }
+func (m *NetworkInfo) String() string { return proto.CompactTextString(m) }
+func (*NetworkInfo) ProtoMessage()    {}
+func (*NetworkInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a9a24761cea32b5c, []int{3}
+}
+func (m *NetworkInfo) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NetworkInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_NetworkInfo.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *NetworkInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NetworkInfo.Merge(m, src)
+}
+func (m *NetworkInfo) XXX_Size() int {
+	return m.Size()
+}
+func (m *NetworkInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_NetworkInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NetworkInfo proto.InternalMessageInfo
+
+func (m *NetworkInfo) GetWanIP() string {
+	if m != nil {
+		return m.WanIP
+	}
+	return ""
+}
+
+func (m *NetworkInfo) GetLanIPs() []string {
+	if m != nil {
+		return m.LanIPs
+	}
+	return nil
+}
+
+func (m *NetworkInfo) GetMac() string {
+	if m != nil {
+		return m.Mac
+	}
+	return ""
+}
+
+func (m *NetworkInfo) GetPrimaryIface() string {
+	if m != nil {
+		return m.PrimaryIface
+	}
+	return ""
+}
+
+type Heartbeat struct {
+	AgentID   string       `protobuf:"bytes,1,opt,name=AgentID,proto3" json:"AgentID,omitempty"`
+	Timestamp uint64       `protobuf:"varint,2,opt,name=Timestamp,proto3" json:"Timestamp,omitempty"`
+	Sys       *SystemInfo  `protobuf:"bytes,3,opt,name=Sys,proto3" json:"Sys,omitempty"`
+	Net       *NetworkInfo `protobuf:"bytes,4,opt,name=Net,proto3" json:"Net,omitempty"`
+}
+
+func (m *Heartbeat) Reset()         { *m = Heartbeat{} }
+func (m *Heartbeat) String() string { return proto.CompactTextString(m) }
+func (*Heartbeat) ProtoMessage()    {}
+func (*Heartbeat) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a9a24761cea32b5c, []int{4}
+}
+func (m *Heartbeat) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Heartbeat) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Heartbeat.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Heartbeat) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Heartbeat.Merge(m, src)
+}
+func (m *Heartbeat) XXX_Size() int {
+	return m.Size()
+}
+func (m *Heartbeat) XXX_DiscardUnknown() {
+	xxx_messageInfo_Heartbeat.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Heartbeat proto.InternalMessageInfo
+
+func (m *Heartbeat) GetAgentID() string {
+	if m != nil {
+		return m.AgentID
+	}
+	return ""
+}
+
+func (m *Heartbeat) GetTimestamp() uint64 {
+	if m != nil {
+		return m.Timestamp
+	}
+	return 0
+}
+
+func (m *Heartbeat) GetSys() *SystemInfo {
+	if m != nil {
+		return m.Sys
+	}
+	return nil
+}
+
+func (m *Heartbeat) GetNet() *NetworkInfo {
+	if m != nil {
+		return m.Net
+	}
+	return nil
+}
+
 func init() {
+	proto.RegisterEnum("implant.OSType", OSType_name, OSType_value)
 	proto.RegisterType((*CommandData)(nil), "implant.CommandData")
 	proto.RegisterType((*FirstConnection)(nil), "implant.FirstConnection")
+	proto.RegisterType((*SystemInfo)(nil), "implant.SystemInfo")
+	proto.RegisterType((*NetworkInfo)(nil), "implant.NetworkInfo")
+	proto.RegisterType((*Heartbeat)(nil), "implant.Heartbeat")
 }
 
 func init() { proto.RegisterFile("implant.proto", fileDescriptor_a9a24761cea32b5c) }
 
 var fileDescriptor_a9a24761cea32b5c = []byte{
-	// 225 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0xcd, 0xcc, 0x2d, 0xc8,
-	0x49, 0xcc, 0x2b, 0xd1, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x87, 0x72, 0x95, 0xa2, 0xb9,
-	0xb8, 0x9d, 0xf3, 0x73, 0x73, 0x13, 0xf3, 0x52, 0x5c, 0x12, 0x4b, 0x12, 0x85, 0xa4, 0xb8, 0x38,
-	0x40, 0x74, 0x48, 0x65, 0x41, 0xaa, 0x04, 0xa3, 0x02, 0xa3, 0x06, 0x4b, 0x10, 0x9c, 0x2f, 0x24,
-	0xc3, 0xc5, 0x19, 0x92, 0x99, 0x9b, 0x1a, 0x5c, 0x92, 0x98, 0x5b, 0x20, 0xc1, 0xa4, 0xc0, 0xa8,
-	0xc1, 0x19, 0x84, 0x10, 0x10, 0x12, 0xe2, 0x62, 0x01, 0xa9, 0x94, 0x60, 0x56, 0x60, 0xd4, 0xe0,
-	0x09, 0x02, 0xb3, 0x95, 0xfa, 0x19, 0xb9, 0xf8, 0xdd, 0x32, 0x8b, 0x8a, 0x4b, 0x9c, 0xf3, 0xf3,
-	0xf2, 0x52, 0x93, 0x4b, 0x32, 0xf3, 0xf3, 0x40, 0xa6, 0x04, 0x94, 0x26, 0xe5, 0x64, 0x26, 0x7b,
-	0xa7, 0x56, 0x82, 0xad, 0xe0, 0x09, 0x42, 0x08, 0x80, 0x64, 0x83, 0x53, 0x8b, 0x8b, 0x33, 0xf3,
-	0xf3, 0x3c, 0x53, 0x60, 0x76, 0xc0, 0x05, 0x84, 0xc4, 0xb8, 0xd8, 0xc2, 0x52, 0x8b, 0x32, 0xd3,
-	0x2a, 0xa1, 0xb6, 0x40, 0x79, 0x42, 0x1a, 0x5c, 0xfc, 0x70, 0x23, 0xa0, 0x0a, 0x58, 0xc0, 0x0a,
-	0xd0, 0x85, 0x9d, 0x24, 0x4e, 0x3c, 0x92, 0x63, 0xbc, 0xf0, 0x48, 0x8e, 0xf1, 0xc1, 0x23, 0x39,
-	0xc6, 0x09, 0x8f, 0xe5, 0x18, 0x2e, 0x3c, 0x96, 0x63, 0xb8, 0xf1, 0x58, 0x8e, 0x21, 0x89, 0x0d,
-	0x1c, 0x30, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0x0d, 0x86, 0x1b, 0x10, 0x29, 0x01, 0x00,
+	// 545 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x5c, 0x53, 0xc1, 0x6e, 0xd3, 0x40,
+	0x10, 0xcd, 0xc6, 0x69, 0x5a, 0x4f, 0xd2, 0xc6, 0x5a, 0x2a, 0x64, 0x21, 0x64, 0x22, 0x0b, 0x90,
+	0xc5, 0xa1, 0x87, 0xf0, 0x05, 0x69, 0x2c, 0x54, 0x2b, 0xad, 0x1d, 0xed, 0x36, 0x0d, 0x12, 0x87,
+	0xb0, 0x71, 0x36, 0x60, 0x11, 0xdb, 0xc1, 0x5e, 0x84, 0xfc, 0x15, 0x20, 0xbe, 0x8a, 0x63, 0x8f,
+	0x1c, 0x51, 0x72, 0xe6, 0x1f, 0xd0, 0x6e, 0x6c, 0x87, 0x72, 0xca, 0xbc, 0x37, 0x2f, 0x33, 0x6f,
+	0x66, 0xd6, 0x70, 0x1a, 0xc5, 0x9b, 0x35, 0x4b, 0xc4, 0xc5, 0x26, 0x4b, 0x45, 0x8a, 0x8f, 0x4b,
+	0x68, 0xbf, 0x83, 0xce, 0x28, 0x8d, 0x63, 0x96, 0x2c, 0x5d, 0x26, 0x18, 0x7e, 0x02, 0x27, 0xf2,
+	0xf7, 0xb6, 0xd8, 0x70, 0x13, 0xf5, 0x91, 0xd3, 0x22, 0x35, 0xc6, 0x4f, 0x41, 0xbf, 0x8d, 0x62,
+	0x4e, 0x05, 0x8b, 0x37, 0x66, 0xb3, 0x8f, 0x1c, 0x9d, 0x1c, 0x08, 0x8c, 0xa1, 0x25, 0x95, 0xa6,
+	0xd6, 0x47, 0x4e, 0x97, 0xa8, 0xd8, 0xfe, 0x86, 0xa0, 0xf7, 0x26, 0xca, 0x72, 0x31, 0x4a, 0x93,
+	0x84, 0x87, 0x22, 0x4a, 0x13, 0x59, 0x65, 0xf2, 0x65, 0xb1, 0x8e, 0xc2, 0x31, 0x2f, 0x54, 0x8b,
+	0x2e, 0x39, 0x10, 0x32, 0x4b, 0x79, 0x9e, 0x47, 0x69, 0xe2, 0x2d, 0xab, 0x1e, 0x35, 0x81, 0x1f,
+	0x43, 0xfb, 0x8e, 0x67, 0xd1, 0xaa, 0x28, 0xbb, 0x94, 0x08, 0x3b, 0xd0, 0xab, 0x4b, 0x94, 0x82,
+	0x96, 0x12, 0xfc, 0x4f, 0xdb, 0x7f, 0x10, 0x00, 0x2d, 0x72, 0xc1, 0x63, 0x2f, 0x59, 0xa5, 0xf8,
+	0x19, 0x34, 0x03, 0xaa, 0x5c, 0x9c, 0x0d, 0x7a, 0x17, 0xd5, 0x8a, 0x02, 0x2a, 0xe7, 0x25, 0xcd,
+	0x80, 0x4a, 0x3f, 0x01, 0xbd, 0xe3, 0x99, 0x34, 0x50, 0xf9, 0xa9, 0x09, 0xfc, 0x1c, 0x4e, 0xc7,
+	0x3c, 0x4b, 0xf8, 0xba, 0x52, 0x68, 0x4a, 0xf1, 0x90, 0x94, 0x9b, 0x19, 0x66, 0xe1, 0x47, 0x65,
+	0x49, 0x27, 0x2a, 0x96, 0x7b, 0xbe, 0x4a, 0x73, 0xe1, 0xb3, 0x98, 0x9b, 0x47, 0x8a, 0xaf, 0xb1,
+	0xcc, 0x4d, 0x73, 0x9e, 0xa9, 0x5c, 0x7b, 0x9f, 0xab, 0x30, 0x36, 0x40, 0x9b, 0x44, 0x4b, 0xf3,
+	0xb8, 0x8f, 0x9c, 0x53, 0x22, 0x43, 0xe9, 0x70, 0xba, 0x11, 0xf2, 0x0c, 0x3c, 0x34, 0x4f, 0xd4,
+	0xc9, 0x0e, 0x84, 0xfd, 0x19, 0x3a, 0x3e, 0x17, 0x5f, 0xd3, 0xec, 0x93, 0x9a, 0xf7, 0x1c, 0x8e,
+	0x66, 0x2c, 0xf1, 0x26, 0x6a, 0x64, 0x9d, 0xec, 0x81, 0x5c, 0xeb, 0xb5, 0x0c, 0x72, 0xb3, 0xd9,
+	0xd7, 0x1c, 0x9d, 0x94, 0x48, 0x36, 0xbb, 0x61, 0x61, 0x39, 0x94, 0x0c, 0xb1, 0x0d, 0xdd, 0x49,
+	0x16, 0xc5, 0x2c, 0x2b, 0xbc, 0x15, 0x0b, 0x79, 0x39, 0xd2, 0x03, 0xce, 0xfe, 0x81, 0x40, 0xbf,
+	0xe2, 0x2c, 0x13, 0x0b, 0xce, 0x04, 0x36, 0xe1, 0x78, 0xf8, 0x81, 0x27, 0xc2, 0x73, 0xcb, 0x9e,
+	0x15, 0xac, 0x9e, 0x53, 0x5e, 0x3f, 0xa7, 0x16, 0x39, 0x10, 0xf8, 0x05, 0x68, 0xb4, 0xc8, 0x55,
+	0xef, 0xce, 0xe0, 0x51, 0x7d, 0x9a, 0xc3, 0xed, 0x88, 0xcc, 0xe3, 0x97, 0xa0, 0xf9, 0x5c, 0x28,
+	0x1f, 0x9d, 0xc1, 0x79, 0x2d, 0xfb, 0x67, 0x66, 0x22, 0x05, 0xaf, 0xde, 0x43, 0x7b, 0x7f, 0x55,
+	0x7c, 0x06, 0x10, 0xd0, 0xf9, 0xd4, 0x1f, 0xfb, 0xc1, 0xcc, 0x37, 0x1a, 0x25, 0x9e, 0x79, 0xbe,
+	0x1b, 0xcc, 0xa8, 0x81, 0x70, 0x17, 0x4e, 0x02, 0x3a, 0xbf, 0xf6, 0xfc, 0xe9, 0x5b, 0xa3, 0x59,
+	0xa2, 0x9b, 0xe1, 0x28, 0xa0, 0x86, 0x86, 0x41, 0x56, 0x99, 0x5f, 0x52, 0xd7, 0x68, 0x95, 0xff,
+	0x1b, 0xfa, 0x2e, 0x09, 0x3c, 0xd7, 0x38, 0xba, 0x34, 0x7f, 0x6e, 0x2d, 0x74, 0xbf, 0xb5, 0xd0,
+	0xef, 0xad, 0x85, 0xbe, 0xef, 0xac, 0xc6, 0xfd, 0xce, 0x6a, 0xfc, 0xda, 0x59, 0x8d, 0x45, 0x5b,
+	0x7d, 0x72, 0xaf, 0xff, 0x06, 0x00, 0x00, 0xff, 0xff, 0x41, 0x82, 0xec, 0xd5, 0x83, 0x03, 0x00,
 	0x00,
 }
 
@@ -269,6 +566,191 @@ func (m *FirstConnection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *SystemInfo) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SystemInfo) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SystemInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.UptimeSec != 0 {
+		i = encodeVarintImplant(dAtA, i, uint64(m.UptimeSec))
+		i--
+		dAtA[i] = 0x40
+	}
+	if m.Pid != 0 {
+		i = encodeVarintImplant(dAtA, i, uint64(m.Pid))
+		i--
+		dAtA[i] = 0x38
+	}
+	if len(m.UserName) > 0 {
+		i -= len(m.UserName)
+		copy(dAtA[i:], m.UserName)
+		i = encodeVarintImplant(dAtA, i, uint64(len(m.UserName)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.HostName) > 0 {
+		i -= len(m.HostName)
+		copy(dAtA[i:], m.HostName)
+		i = encodeVarintImplant(dAtA, i, uint64(len(m.HostName)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Arch) > 0 {
+		i -= len(m.Arch)
+		copy(dAtA[i:], m.Arch)
+		i = encodeVarintImplant(dAtA, i, uint64(len(m.Arch)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.KernelVersion) > 0 {
+		i -= len(m.KernelVersion)
+		copy(dAtA[i:], m.KernelVersion)
+		i = encodeVarintImplant(dAtA, i, uint64(len(m.KernelVersion)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.OSVersion) > 0 {
+		i -= len(m.OSVersion)
+		copy(dAtA[i:], m.OSVersion)
+		i = encodeVarintImplant(dAtA, i, uint64(len(m.OSVersion)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.OS != 0 {
+		i = encodeVarintImplant(dAtA, i, uint64(m.OS))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *NetworkInfo) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *NetworkInfo) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NetworkInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.PrimaryIface) > 0 {
+		i -= len(m.PrimaryIface)
+		copy(dAtA[i:], m.PrimaryIface)
+		i = encodeVarintImplant(dAtA, i, uint64(len(m.PrimaryIface)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Mac) > 0 {
+		i -= len(m.Mac)
+		copy(dAtA[i:], m.Mac)
+		i = encodeVarintImplant(dAtA, i, uint64(len(m.Mac)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.LanIPs) > 0 {
+		for iNdEx := len(m.LanIPs) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.LanIPs[iNdEx])
+			copy(dAtA[i:], m.LanIPs[iNdEx])
+			i = encodeVarintImplant(dAtA, i, uint64(len(m.LanIPs[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.WanIP) > 0 {
+		i -= len(m.WanIP)
+		copy(dAtA[i:], m.WanIP)
+		i = encodeVarintImplant(dAtA, i, uint64(len(m.WanIP)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Heartbeat) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Heartbeat) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Heartbeat) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Net != nil {
+		{
+			size, err := m.Net.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintImplant(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Sys != nil {
+		{
+			size, err := m.Sys.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintImplant(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Timestamp != 0 {
+		i = encodeVarintImplant(dAtA, i, uint64(m.Timestamp))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.AgentID) > 0 {
+		i -= len(m.AgentID)
+		copy(dAtA[i:], m.AgentID)
+		i = encodeVarintImplant(dAtA, i, uint64(len(m.AgentID)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintImplant(dAtA []byte, offset int, v uint64) int {
 	offset -= sovImplant(v)
 	base := offset
@@ -320,6 +802,95 @@ func (m *FirstConnection) Size() (n int) {
 	}
 	l = len(m.PublicKeyVerify)
 	if l > 0 {
+		n += 1 + l + sovImplant(uint64(l))
+	}
+	return n
+}
+
+func (m *SystemInfo) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.OS != 0 {
+		n += 1 + sovImplant(uint64(m.OS))
+	}
+	l = len(m.OSVersion)
+	if l > 0 {
+		n += 1 + l + sovImplant(uint64(l))
+	}
+	l = len(m.KernelVersion)
+	if l > 0 {
+		n += 1 + l + sovImplant(uint64(l))
+	}
+	l = len(m.Arch)
+	if l > 0 {
+		n += 1 + l + sovImplant(uint64(l))
+	}
+	l = len(m.HostName)
+	if l > 0 {
+		n += 1 + l + sovImplant(uint64(l))
+	}
+	l = len(m.UserName)
+	if l > 0 {
+		n += 1 + l + sovImplant(uint64(l))
+	}
+	if m.Pid != 0 {
+		n += 1 + sovImplant(uint64(m.Pid))
+	}
+	if m.UptimeSec != 0 {
+		n += 1 + sovImplant(uint64(m.UptimeSec))
+	}
+	return n
+}
+
+func (m *NetworkInfo) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.WanIP)
+	if l > 0 {
+		n += 1 + l + sovImplant(uint64(l))
+	}
+	if len(m.LanIPs) > 0 {
+		for _, s := range m.LanIPs {
+			l = len(s)
+			n += 1 + l + sovImplant(uint64(l))
+		}
+	}
+	l = len(m.Mac)
+	if l > 0 {
+		n += 1 + l + sovImplant(uint64(l))
+	}
+	l = len(m.PrimaryIface)
+	if l > 0 {
+		n += 1 + l + sovImplant(uint64(l))
+	}
+	return n
+}
+
+func (m *Heartbeat) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.AgentID)
+	if l > 0 {
+		n += 1 + l + sovImplant(uint64(l))
+	}
+	if m.Timestamp != 0 {
+		n += 1 + sovImplant(uint64(m.Timestamp))
+	}
+	if m.Sys != nil {
+		l = m.Sys.Size()
+		n += 1 + l + sovImplant(uint64(l))
+	}
+	if m.Net != nil {
+		l = m.Net.Size()
 		n += 1 + l + sovImplant(uint64(l))
 	}
 	return n
@@ -627,6 +1198,624 @@ func (m *FirstConnection) Unmarshal(dAtA []byte) error {
 			m.PublicKeyVerify = append(m.PublicKeyVerify[:0], dAtA[iNdEx:postIndex]...)
 			if m.PublicKeyVerify == nil {
 				m.PublicKeyVerify = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipImplant(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SystemInfo) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowImplant
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SystemInfo: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SystemInfo: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OS", wireType)
+			}
+			m.OS = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OS |= OSType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OSVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthImplant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OSVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field KernelVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthImplant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.KernelVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Arch", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthImplant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Arch = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HostName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthImplant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.HostName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthImplant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UserName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pid", wireType)
+			}
+			m.Pid = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Pid |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UptimeSec", wireType)
+			}
+			m.UptimeSec = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.UptimeSec |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipImplant(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *NetworkInfo) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowImplant
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: NetworkInfo: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: NetworkInfo: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WanIP", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthImplant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WanIP = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LanIPs", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthImplant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.LanIPs = append(m.LanIPs, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Mac", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthImplant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Mac = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrimaryIface", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthImplant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PrimaryIface = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipImplant(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Heartbeat) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowImplant
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Heartbeat: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Heartbeat: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AgentID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthImplant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AgentID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Timestamp", wireType)
+			}
+			m.Timestamp = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Timestamp |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sys", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthImplant
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Sys == nil {
+				m.Sys = &SystemInfo{}
+			}
+			if err := m.Sys.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Net", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImplant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthImplant
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthImplant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Net == nil {
+				m.Net = &NetworkInfo{}
+			}
+			if err := m.Net.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
 			}
 			iNdEx = postIndex
 		default:
